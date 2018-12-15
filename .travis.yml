@@ -1,0 +1,24 @@
+language: csharp
+dist: trusty
+dotnet: 2.0.0
+mono: none
+env:
+  global:
+  - DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  - DOTNET_CLI_TELEMETRY_OPTOUT: 1
+script:
+- dotnet restore
+- dotnet build -c Release
+- dotnet test ./SampleLibrary.Tests
+- dotnet publish -c Release
+before_deploy:
+- zip -q release.zip -j ./Sample/bin/Release/netcoreapp2.0/publish/*
+deploy:
+  provider: releases
+  skip_clean up: ture
+  api_key:
+    secure: gxHJsk/7UKwa+ojvMMUK1nDyt8dej2zFcwiQOaQUgUWfGefCDCjm7U4M8/68pL14/2apAy5TXcm38govrxpxxdVzT8d5F7ON/4+L01uSXeM0J3e5KAXGYYB4KELEUv49eErc3uFtoh/z1zowKIqrvy43yaSFab5q5+tchUk/G9ZPE11F0rsCTUVPTzMAi0nIq4u2b2Sc169iJ73VonevBbbWnce2DU5FzN34Sf66H5fdsjk13+QKR6sqwt5WAp/a5T2fWeMQl5ATv4bY4xI7g/JF0Tc+t0Q4PUPDOzVaEsVtT8FYJzssuxnI8CkvetEsXQJXUOlI2Cno6MGOkEebRWF9wM4WX23QWiO9LuOve2DOnGjbcvtud2suYFl/3Sn6qC2lUp7J3LAqFirnTuJ13QDak6Hqms6BSVF8wwqlXeQti91umqVUvgFJDRWyzuZ/37FHZ5m++toHXE9phJxvran0Lqdy3oEG2SpsTA0XRYEaDJvVyk+XXYE9rdAx0zRBG4vo6eNuT1C3RfI4XiN88DeEGqJTXWZN+rZRa46Dv5rEep0nq3u40d0Mj0672p4uYT9iJJkJz/ASFqUhALEbHuR6zB8BmCIcl/uVRc0pj/EORkLGU2RMZEHmvBg54jNLUezddQxshRX+s0eJXRXdYp6bIXMcM0ppEcgY9iG3KoQ=
+  file_glob: true
+  file: releases.zip
+  on:
+    repo: benkyodesuyo/DevOpsSample
